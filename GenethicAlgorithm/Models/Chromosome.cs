@@ -8,9 +8,9 @@ namespace GenethicAlgorithm.Models
 {
     struct Gen
     {
-        public Gen(bool val)
+        public Gen(int val)
         {
-            value = val;
+            value = val == 1 ? true : false;
         }
         public bool value { get; set; }
         public char ToChar()
@@ -24,11 +24,12 @@ namespace GenethicAlgorithm.Models
     }
     internal class Chromosome
     {
-        private Gen[] genArray;
-        public int ChromePower { get; private set; }
+        public Gen[] genArray { get; private set; }
+        public int chromePower { get; private set; }
         public Chromosome(int size)
         {
             genArray = new Gen[size];
+            GenerateChromosome();
         }
         public override string ToString()
         {
@@ -46,7 +47,15 @@ namespace GenethicAlgorithm.Models
             {
                 power =+ gen.GetValue();
             }
-            ChromePower = power;
+            chromePower = power;
+        }
+        private void GenerateChromosome()
+        {
+            for(int i = 0; i < genArray.Length; i++)
+            {
+                int value = new Random().Next(0, 1);
+                genArray[i] = new Gen(value);
+            }
         }
     }
 }
