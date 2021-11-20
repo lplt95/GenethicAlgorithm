@@ -9,5 +9,19 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <Grid>
+        <TextBlock Text="ALGORYTM GENETYCZNY" FontSize="24" FontWeight="Bold" HorizontalAlignment="Center" Margin="0, 20, 0, 950"/>
+        <StackPanel Orientation="Vertical" Margin="100, 100, 1200, 600">
+            <TextBlock x:Name="tbPopCount" FontSize="16" Text="Liczebność populacji:" Margin="10, 10, 0, 10"/>
+            <TextBox x:Name="txPopCount" PlaceholderText="Populacja" BeforeTextChanging="BeforeTextChanging"/>
+            <TextBlock x:Name="tbGenCount" FontSize="16" Text="Ilość genów" Margin="10, 20, 0, 10"/>
+            <TextBox x:Name="txGenCount" PlaceholderText="Geny" BeforeTextChanging="BeforeTextChanging"/>
+            <TextBlock x:Name="tbMuteCoef" FontSize="16" Text="Współczynnik mutacji" Margin="10, 20, 0, 10"/>
+            <TextBox x:Name="txMuteCoef" PlaceholderText="Mutacja" BeforeTextChanging="BeforeTextChanging"/>
+            <Button x:Name="btStart" Content="Start!" HorizontalAlignment="Center" Margin="0, 20, 0, 0" Click="btStart_Click"/>
+        </StackPanel>
+        <StackPanel Margin="400, 100, 100, 100">
+            <TextBlock x:Name="tbResHed" Text="REZULTAT" HorizontalAlignment="Center" Margin="0, 10, 0, 0" FontSize="20" FontWeight="ExtraBold"/>
+            <RichTextBlock x:Name="txRes" Margin="10, 10, 0, 0"/>
+        </StackPanel>
     </Grid>
 </Page>

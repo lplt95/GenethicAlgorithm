@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -13,6 +14,8 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using GenethicAlgorithm.Models;
+using Windows.UI.Popups;
+using Windows.ApplicationModel.Resources;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
@@ -57,6 +60,61 @@ namespace GenethicAlgorithm
             {
                 chromeArray[i] = new Chromosome(genCount);
             }
+        }
+
+        private void btStart_Click(object sender, RoutedEventArgs e)
+        {
+            
+        }
+        private async void BeforeTextChanging(TextBox sender, TextBoxBeforeTextChangingEventArgs args)
+        {
+            string fieldType = CheckFieldType(sender.Name);
+            args.Cancel = IsCancelled(args.NewText, fieldType);
+            if (args.Cancel)
+            {
+                string error = "Musisz wprowadzić liczbę";
+                await new MessageDialog(error).ShowAsync();
+            }
+        }
+        private bool IsCancelled(string textToCheck, string fieldType)
+        {
+            bool isCancelled = false;
+            if (fieldType == "int")
+            {
+                isCancelled = textToCheck.Any(c => !char.IsDigit(c)) ? true : false;
+            }
+            else if (fieldType == "double")
+            {
+                if (textToCheck.Any(c => char.IsLetter(c)))
+                {
+                    isCancelled = true;
+                    return isCancelled;
+                }
+                var decimalSign = NumberFormatInfo.CurrentInfo.NumberDecimalSeparator.ToCharArray();
+                bool containsDecimal = textToCheck.Any(c => c == decimalSign[0]);
+                if (containsDecimal)
+                {
+                    bool oneDot = textToCheck.Count(c => c == decimalSign[0]) != 1 ? false : true;
+                    bool areDigits = textToCheck.Replace(decimalSign[0], '0').Any(c => char.IsDigit(c));
+                    if (!oneDot || !areDigits) isCancelled = true;
+                }
+                else
+                {
+                    bool containsDigits = textToCheck.Any(c => !char.IsDigit(c));
+                    if (containsDigits) isCancelled = true;
+                }
+            }
+            else
+            {
+                throw new UnsupportedFormatException();
+            }
+            return isCancelled;
+        }
+        private string CheckFieldType(string fieldName)
+        {
+            var resourceLoader = new ResourceLoader();
+            string type = resourceLoader.GetString(fieldName);
+            return type;
         }
     }
 }
