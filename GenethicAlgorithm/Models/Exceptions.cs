@@ -10,4 +10,8 @@ namespace GenethicAlgorithm.Models
     {
         public override string Message => "Unsupported field format. Contact with support.";
     }
+    public class WrongFormatException : Exception
+    {
+        public override string Message => "Wrong format - cannot parse to number. Contact with support.";
+    }
 }

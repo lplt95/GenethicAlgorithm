@@ -14,6 +14,7 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using GenethicAlgorithm.Models;
+using GenethicAlgorithm.Methods;
 using Windows.UI.Popups;
 using Windows.ApplicationModel.Resources;
 
@@ -40,15 +41,24 @@ namespace GenethicAlgorithm
         private void StartProcedure()
         {
             chromeArray = new Chromosome[population];
+            GeneratePopulation();
             while(loopCount < 1000)
             {
                 bool isFinished = false;
-                //TODO: enter the logic
+                var selectedList = Selection.SelectChrome(chromeArray);
+                var newGeneration = Crossover.CrossoverChrome(selectedList);
+                if(CalculateMutation())
+                {
+                    int whichChrome = SelectChrome(newGeneration);
+                    Mutation.Mute(newGeneration, whichChrome);
+                }
+                isFinished = CheckForEnd(newGeneration);
                 if (isFinished)
                     break;
                 else
                     loopCount++;                
             }
+            ShowResults();
         }
         private void ShowResults()
         {
@@ -64,7 +74,15 @@ namespace GenethicAlgorithm
 
         private void btStart_Click(object sender, RoutedEventArgs e)
         {
-            
+            bool pop, count, coef;
+            pop = Int32.TryParse(txPopCount.Text, out population);
+            count = Int32.TryParse(txGenCount.Text, out genCount);
+            coef = Double.TryParse(txMuteCoef.Text, out muteCoef);
+            if(!pop || !count || !coef)
+            {
+                throw new WrongFormatException();
+            }
+            StartProcedure();
         }
         private async void BeforeTextChanging(TextBox sender, TextBoxBeforeTextChangingEventArgs args)
         {
@@ -115,6 +133,21 @@ namespace GenethicAlgorithm
             var resourceLoader = new ResourceLoader();
             string type = resourceLoader.GetString(fieldName);
             return type;
+        }
+        private bool CalculateMutation()
+        {
+            bool mute = false;
+            return mute;
+        }
+        private int SelectChrome(Chromosome[] listToSelect)
+        {
+            int whichChrome = new Random().Next(listToSelect.Length);
+            return whichChrome;
+        }
+        private bool CheckForEnd(Chromosome[] chromeList)
+        {
+            bool isFinished = false;
+            return isFinished;
         }
     }
 }
